@@ -4,9 +4,11 @@ import com.rodin.mavenBasics.data.Circle;
 import com.rodin.mavenBasics.data.Cylinder;
 import com.rodin.mavenBasics.logic.AreaCircle;
 import com.rodin.mavenBasics.logic.CylinderVolume;
+import com.rodin.mavenBasics.logic.SumAllDigitsString;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import static com.rodin.mavenBasics.logic.FindNumberSpecifiedLettersInString.findNumberOfSpecifiedLettersInString;
 
@@ -23,6 +25,7 @@ public class Runner {
         calculateAreaCircle();
         calculateCylinderVolume();
         findNumberSpecifiedLettersInString();
+        calculateSumOfAllDigitsInString();
     }
 
     private static void calculateAreaCircle() {
@@ -48,5 +51,14 @@ public class Runner {
     private static void findNumberSpecifiedLettersInString() {
         findNumberOfSpecifiedLettersInString(INPUT_STRING, MAP);
         System.out.println(MAP);
+    }
+
+    private static void calculateSumOfAllDigitsInString() {
+        SumAllDigitsString sumAllDigitsString =
+                new SumAllDigitsString();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Input string: ");
+        String str = scanner.next();
+        System.out.println(sumAllDigitsString.calculateSumAllDigitsInString(str));
     }
 }
