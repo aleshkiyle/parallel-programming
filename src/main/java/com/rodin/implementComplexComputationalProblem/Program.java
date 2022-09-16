@@ -2,7 +2,7 @@ package com.rodin.implementComplexComputationalProblem;
 
 public class Program {
 
-    private static final Integer THROW = 1000;
+    private static final int THROW = 100;
 
     public static void main(String[] args) {
         ImplementCalculateProbability implementCalculateProbability =

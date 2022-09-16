@@ -2,7 +2,7 @@ package com.rodin.implementComplexComputationalProblem;
 
 public class ImplementCalculateProbability {
 
-    public float implementTask(Integer THROW) {
+    public float implementTask(int THROW) {
         GenerationNumber generationNumber = new GenerationNumber();
         int countMore80 = 0;
         int[] array = new int[10];
