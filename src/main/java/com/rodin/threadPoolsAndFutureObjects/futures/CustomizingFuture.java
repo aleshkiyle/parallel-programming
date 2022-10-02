@@ -1,4 +1,4 @@
-package com.rodin.concurrency.futureAndExecutorService.futures;
+package com.rodin.threadPoolsAndFutureObjects.futures;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -9,11 +9,10 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CustomizingFuture<T> implements Future<T> {
+    private final Listener<T> listener;
 
-    private Listener<T> listener;
-
-    private ExecutorService listenerExecutor;
-    private ReadWriteLock readWriteLock;
+    private final ExecutorService listenerExecutor;
+    private final ReadWriteLock readWriteLock;
     private boolean isCanceled;
     private T object;
     private Exception exception;
@@ -79,7 +78,9 @@ public class CustomizingFuture<T> implements Future<T> {
                 this.listener.settableSet(object, null);
             } else {
                 this.listenerExecutor.submit(() -> {
-                    System.out.println("BEING LISTENED ON: " + Thread.currentThread().getId());
+                    System.out.printf("Being listened in with id %s thread \n", Thread.currentThread().getId());
+                    System.out.printf("Java thread: %s finished \n", Thread.currentThread().getName());
+                    System.out.println(Thread.currentThread().getState());
                     listener.settableSet(object, null);
                 });
             }

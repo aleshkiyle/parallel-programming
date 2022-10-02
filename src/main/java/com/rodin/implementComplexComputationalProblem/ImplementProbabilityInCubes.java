@@ -1,37 +1,41 @@
 package com.rodin.implementComplexComputationalProblem;
 
-public class ImplementProbabilityInCubes extends Thread {
+import java.util.concurrent.Callable;
+
+public class ImplementProbabilityInCubes implements Runnable, Callable<String> {
 
     private static final int THROW = 9626564;
 
-    private double e;
+    private final double e;
 
     public ImplementProbabilityInCubes(double e) {
         this.e = e;
     }
 
-    public static int getRandomNumber() {
-        return (int) (Math.random() * 6) + 1;
+    public void printProbability() {
+        double probability = getProb();
+        System.out.printf("Probability: %.10f \n", probability);
     }
 
-    public void getProbability(double e) {
+    public double getProb() {
         int countMore80 = 0;
         float probability = 0;
         int counterPercent = 0;
         int[] array = new int[10];
         for (int j = 0; j < THROW; j++) {
-            countMore80 = getCountMore80(e, countMore80, probability, array);
+            countMore80 = getCountMore80(countMore80, array);
             probability = (float) countMore80 / j;
-            if (j == THROW/ 10 * counterPercent) {
-                System.out.println((counterPercent * 10) + " %");
+            if (j == THROW / 10 * counterPercent) {
+                System.out.printf("Thread name: %s, percent progress bar: %d \n",
+                        Thread.currentThread().getName(),
+                        (counterPercent * 10));
                 counterPercent++;
             }
         }
-        System.out.printf("%.10f", probability);
+        return probability;
     }
 
-    private int getCountMore80(double e, int countMore80, float probability, int[] array) {
-        // while (Math.abs(probability - e / 2) > e) {
+    private int getCountMore80(int countMore80, int[] array) {
         int sum = 0;
         for (int i = 0; i < 10; i++) {
             array[i] = getRandomNumber();
@@ -43,12 +47,20 @@ public class ImplementProbabilityInCubes extends Thread {
         if (sum > 80) {
             countMore80 += 1;
         }
-        //  }
         return countMore80;
+    }
+
+    private static int getRandomNumber() {
+        return (int) (Math.random() * 6) + 1;
     }
 
     @Override
     public void run() {
-        getProbability(e);
+        printProbability();
+    }
+
+    @Override
+    public String call() throws Exception {
+        return String.format("Probability: %.10f", getProb());
     }
 }

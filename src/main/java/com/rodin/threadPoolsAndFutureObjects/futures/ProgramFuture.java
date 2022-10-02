@@ -1,4 +1,4 @@
-package com.rodin.concurrency.futureAndExecutorService.futures;
+package com.rodin.threadPoolsAndFutureObjects.futures;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;

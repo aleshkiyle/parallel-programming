@@ -10,6 +10,8 @@ public class ProgramImplementQuestion {
         TestThread testThread1 = new TestThread();
         System.out.println(testThread.getName());
         System.out.println(testThread1.getName());
+        testThread.start();
+        testThread1.start();
         testThread.setName("TestThreadName");
         System.out.println(testThread.getName());
 
@@ -25,5 +27,13 @@ public class ProgramImplementQuestion {
             }
         }
         return thrRunning;
+    }
+}
+
+class TestThread extends Thread {
+
+    @Override
+    public void run() {
+        System.out.println("Hello test thread");
     }
 }

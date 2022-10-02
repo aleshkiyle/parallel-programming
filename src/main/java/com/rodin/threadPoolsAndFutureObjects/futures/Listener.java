@@ -1,4 +1,4 @@
-package com.rodin.concurrency.futureAndExecutorService.futures;
+package com.rodin.threadPoolsAndFutureObjects.futures;
 
 @FunctionalInterface
 public interface Listener<T> {
