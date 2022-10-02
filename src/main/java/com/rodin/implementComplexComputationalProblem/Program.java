@@ -2,18 +2,17 @@ package com.rodin.implementComplexComputationalProblem;
 
 public class Program {
 
-    private static final int THROW = 100;
+    private static final double E = 0.0001;
 
-    public static void main(String[] args) {
-        ImplementCalculateProbability implementCalculateProbability =
-                new ImplementCalculateProbability();
-
-        float probability = implementCalculateProbability.implementTask(THROW);
-        long finish = System.currentTimeMillis();
+    public static void main(String[] args) throws InterruptedException {
+        ImplementProbabilityInCubes probabilityInCubes =
+                new ImplementProbabilityInCubes(E);
         long start = System.currentTimeMillis();
-        System.out.printf("%.10f", probability);
+        probabilityInCubes.start();
+        probabilityInCubes.join();
         System.out.println();
-        System.out.print("Время работы ");
-        System.out.print((float)(finish - start)/1000);
+        long finish = System.currentTimeMillis();
+        System.out.print("Time work: ");
+        System.out.print((float) (finish - start) / 1000);
     }
 }
