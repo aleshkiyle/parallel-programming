@@ -6,12 +6,10 @@ public class ProgramImplementProbabilityInCubes {
 
     public static void main(String[] args) throws InterruptedException {
 
-        Thread implementProbabilityInCubesThread1 =
-                new Thread(new ImplementProbabilityInCubes(E));
-        Thread implementProbabilityInCubesThread2 =
-                new Thread(new ImplementProbabilityInCubes(E));
-        implementProbabilityInCubesThread1.setName("First thread probability");
-        implementProbabilityInCubesThread2.setName("Second thread probability");
+        ImplementProbabilityInCubes implementProbabilityInCubesThread1 =
+                new ImplementProbabilityInCubes("First thread probability", E);
+        ImplementProbabilityInCubes implementProbabilityInCubesThread2 =
+                new ImplementProbabilityInCubes("Second thread probability", E);
         long start = System.currentTimeMillis();
         implementProbabilityInCubesThread1.start();
         implementProbabilityInCubesThread2.start();

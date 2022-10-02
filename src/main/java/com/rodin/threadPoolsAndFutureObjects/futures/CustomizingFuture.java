@@ -10,7 +10,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CustomizingFuture<T> implements Future<T> {
     private final Listener<T> listener;
-
     private final ExecutorService listenerExecutor;
     private final ReadWriteLock readWriteLock;
     private boolean isCanceled;

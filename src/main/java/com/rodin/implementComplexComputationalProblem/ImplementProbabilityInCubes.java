@@ -1,14 +1,20 @@
 package com.rodin.implementComplexComputationalProblem;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.concurrent.Callable;
 
-public class ImplementProbabilityInCubes implements Runnable, Callable<String> {
+@AllArgsConstructor
+public class ImplementProbabilityInCubes extends Thread implements Callable<String> {
 
     private static final int THROW = 9626564;
 
+    @Getter
     private final double e;
 
-    public ImplementProbabilityInCubes(double e) {
+    public ImplementProbabilityInCubes(String name, double e) {
+        super(name);
         this.e = e;
     }
 
