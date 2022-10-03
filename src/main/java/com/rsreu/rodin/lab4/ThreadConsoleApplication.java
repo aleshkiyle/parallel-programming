@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public class ThreadConsoleApplication {
@@ -53,31 +52,44 @@ public class ThreadConsoleApplication {
         ImplementProbabilityInCubes implementProbabilityInCubes
                 = new ImplementProbabilityInCubes(Long.parseLong(args[1]));
         Thread implementProbabilityInCubesThread = new Thread(implementProbabilityInCubes);
-        implementProbabilityInCubesThread.setDaemon(true);
         implementProbabilityInCubesThread.start();
-        System.out.printf("Thread %d start\n", implementProbabilityInCubesThread.getId());
+        this.tasks.add(implementProbabilityInCubesThread);
+        System.out.printf("Thread %d start%n", implementProbabilityInCubesThread.getId());
     }
 
 
     private void stop(String[] args) throws IncorrectCommandArgumentException, InterruptedException {
         checkCorrectInputArgument(args);
-        int threadId = Integer.parseInt(args[1]);
-        Thread thread = findThreadById(threadId);
-        if (thread != null) {
-            thread.interrupt();
-        }
+        int numberTask = Integer.parseInt(args[1]);
+        stop(numberTask);
     }
+
+    private void stop(int numberTask) throws InterruptedException {
+        this.checkCommandAndImplemenmtDependingOneSelectedCommand(numberTask, Command.STOP);
+    }
+
 
     private void await(String[] args) throws IncorrectCommandArgumentException, InterruptedException {
         checkCorrectInputArgument(args);
-        int threadId = Integer.parseInt(args[1]);
-        Thread thread = findThreadById(threadId);
-        if (thread != null) {
-            try {
-                System.out.printf("Waiting for thread %s...%n", threadId);
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        int numberTask = Integer.parseInt(args[1]);
+        await(numberTask);
+    }
+
+    private void await(int numberTask) throws InterruptedException {
+        this.checkCommandAndImplemenmtDependingOneSelectedCommand(numberTask, Command.AWAIT);
+    }
+
+    private void checkCommandAndImplemenmtDependingOneSelectedCommand(int numberTask, Command command) throws InterruptedException {
+        if (!this.tasks.get(numberTask).isInterrupted()) {
+            switch (command) {
+                case STOP -> {
+                    this.tasks.get(numberTask).interrupt();
+                    System.out.println("STOP THREAD");
+                }
+                case AWAIT -> {
+                    System.out.println("AWAIT THREAD");
+                    this.tasks.get(numberTask).join();
+                }
             }
         }
     }
@@ -114,15 +126,5 @@ public class ThreadConsoleApplication {
 
     private void outputCommandTypeError() {
         System.err.println(UNKNOWN_COMMAND);
-    }
-
-    public static Thread findThreadById(int id) {
-        Set<Thread> threads = Thread.getAllStackTraces().keySet();
-        for (Thread thread : threads) {
-            if (thread.getId() == id) {
-                return thread;
-            }
-        }
-        return null;
     }
 }

@@ -41,7 +41,8 @@ public class ImplementProbabilityInCubes implements Runnable {
         long numbersExcesses = 0;
         for (long i = 0; i < testsCount; ++i) {
             if (Thread.currentThread().isInterrupted()){
-                throw new InterruptedException();
+                System.out.printf("Thread with %d interrupted", Thread.currentThread().getId());
+                return 0;
             }
 
             if (makeThrowingExperiment())
