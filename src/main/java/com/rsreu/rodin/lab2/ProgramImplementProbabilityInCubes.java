@@ -7,9 +7,9 @@ public class ProgramImplementProbabilityInCubes {
         final long TESTS_COUNT = Integer.MAX_VALUE / 77;
 
         ImplementProbabilityInCubes implementProbabilityInCubes =
-                new ImplementProbabilityInCubes();
+                new ImplementProbabilityInCubes(TESTS_COUNT);
         long start = System.currentTimeMillis();
-        double probability = implementProbabilityInCubes.getProbabilityInExperiment(TESTS_COUNT);
+        double probability = implementProbabilityInCubes.getProbabilityInExperiment(implementProbabilityInCubes.getTestCounts());
         long finish = System.currentTimeMillis();
         double timeWork = (finish - start) / 1e3;
         System.out.printf("Probability: %f\n", probability);

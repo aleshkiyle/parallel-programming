@@ -15,13 +15,10 @@ public class ImplementProbabilityInCubes implements Runnable {
     @Getter
     private long testCount;
 
-    public ImplementProbabilityInCubes() {
-
-    }
-
     public ImplementProbabilityInCubes(long testCount) {
         this.testCount = testCount;
     }
+
     private static boolean makeThrowingExperiment() {
         int sum = 0;
         for (int i = 0; i < THROWS_COUNT_IN_SINGLE_TEST; ++i) {
@@ -64,10 +61,7 @@ public class ImplementProbabilityInCubes implements Runnable {
     @Override
     public void run() {
         try {
-            ImplementProbabilityInCubes implementProbabilityInCubes =
-                    new ImplementProbabilityInCubes(Integer.MAX_VALUE / 10);
-            long testCount = implementProbabilityInCubes.getTestCount();
-            System.out.printf("Probability: %f\n", implementProbabilityInCubes.calculateExceedProbability(testCount));
+            System.out.printf("Probability: %f\n", calculateExceedProbability(testCount));
             System.out.printf("Thread %s finished", Thread.currentThread().getId());
         } catch (InterruptedException e) {
             System.out.printf("Thread %s stopped\n", Thread.currentThread().getId());

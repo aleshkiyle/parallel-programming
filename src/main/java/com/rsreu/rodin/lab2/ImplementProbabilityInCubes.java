@@ -1,5 +1,7 @@
 package com.rsreu.rodin.lab2;
 
+import lombok.Getter;
+
 import java.util.Random;
 
 public class ImplementProbabilityInCubes {
@@ -9,6 +11,13 @@ public class ImplementProbabilityInCubes {
     private static final int THROWS_COUNT_IN_SINGLE_TEST = 10; // количество бросков в одном опыте
 
     private static final int LOWER_SCORE_BOUND = 80; // значение очков, которое надо превысить, чтобы событие произошло
+
+    @Getter
+    private long testCounts;
+
+    public ImplementProbabilityInCubes(long testCounts) {
+        this.testCounts = testCounts;
+    }
 
     private static boolean makeThrowingExperiment() {
         Random random = new Random();
