@@ -61,37 +61,14 @@ public class ThreadConsoleApplication {
     private void stop(String[] args) throws IncorrectCommandArgumentException, InterruptedException {
         checkCorrectInputArgument(args);
         int numberTask = Integer.parseInt(args[1]);
-        stop(numberTask);
-    }
-
-    private void stop(int numberTask) throws InterruptedException {
-        this.checkCommandAndImplemenmtDependingOneSelectedCommand(numberTask, Command.STOP);
+        this.checkCommandAndImplementDependingOneSelectedCommand(numberTask, Command.STOP);
     }
 
 
     private void await(String[] args) throws IncorrectCommandArgumentException, InterruptedException {
         checkCorrectInputArgument(args);
         int numberTask = Integer.parseInt(args[1]);
-        await(numberTask);
-    }
-
-    private void await(int numberTask) throws InterruptedException {
-        this.checkCommandAndImplemenmtDependingOneSelectedCommand(numberTask, Command.AWAIT);
-    }
-
-    private void checkCommandAndImplemenmtDependingOneSelectedCommand(int numberTask, Command command) throws InterruptedException {
-        if (!this.tasks.get(numberTask).isInterrupted()) {
-            switch (command) {
-                case STOP -> {
-                    this.tasks.get(numberTask).interrupt();
-                    System.out.println("STOP THREAD");
-                }
-                case AWAIT -> {
-                    System.out.println("AWAIT THREAD");
-                    this.tasks.get(numberTask).join();
-                }
-            }
-        }
+        this.checkCommandAndImplementDependingOneSelectedCommand(numberTask, Command.AWAIT);
     }
 
     private void exit(String[] args) throws IncorrectCommandArgumentException, InterruptedException {
@@ -105,6 +82,22 @@ public class ThreadConsoleApplication {
         this.tasks.forEach(Thread::interrupt);
         for (Thread thread : tasks) {
             thread.join();
+        }
+    }
+
+    private void checkCommandAndImplementDependingOneSelectedCommand(int numberTask, Command command) throws InterruptedException {
+        long idThread = Thread.currentThread().getId();
+        if (!this.tasks.get(numberTask).isInterrupted()) {
+            switch (command) {
+                case STOP -> {
+                    this.tasks.get(numberTask).interrupt();
+                    System.out.printf("STOP THREAD %d", idThread);
+                }
+                case AWAIT -> {
+                    System.out.printf("AWAIT THREAD %d", idThread);
+                    this.tasks.get(numberTask).join();
+                }
+            }
         }
     }
 
