@@ -1,4 +1,4 @@
-import com.rodin.mavenBasics.logic.SumAllDigitsString;
+import com.rsreu.rodin.lab1.logic.SumAllDigitsString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.RepeatedTest;
 
