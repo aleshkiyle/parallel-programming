@@ -17,6 +17,8 @@ public class ThreadConsoleApplication {
 
     private static final String INCORRECT_INDEX = "Incorrect index of task";
 
+    private static final String INCORRECT_NUMBER_FORMAT = "Incorrect number format";
+
     private Scanner scanner = new Scanner(System.in);
 
     private Command command = null;
@@ -25,7 +27,6 @@ public class ThreadConsoleApplication {
 
     public void runProgram() {
         while (command != Command.EXIT) {
-            System.out.println("Input command:");
             String inputString = this.scanner.nextLine();
             String[] args = inputString.split(REGEX_SPLIT);
             command = getCommand(args[0]);
@@ -39,9 +40,10 @@ public class ThreadConsoleApplication {
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                throw new RuntimeException();
             } catch (IndexOutOfBoundsException | IncorrectCommandArgumentException e) {
                 System.err.println(INCORRECT_INDEX);
+            } catch (NumberFormatException e) {
+                System.err.println(INCORRECT_NUMBER_FORMAT);
             }
         }
     }
@@ -54,50 +56,33 @@ public class ThreadConsoleApplication {
         Thread implementProbabilityInCubesThread = new Thread(implementProbabilityInCubes);
         implementProbabilityInCubesThread.start();
         this.tasks.add(implementProbabilityInCubesThread);
-        System.out.printf("Thread %d start%n", implementProbabilityInCubesThread.getId());
+        System.out.printf("Task %s STARTED%n", this.tasks.indexOf(implementProbabilityInCubesThread));
     }
 
 
-    private void stop(String[] args) throws IncorrectCommandArgumentException, InterruptedException {
+    private void stop(String[] args) throws IncorrectCommandArgumentException {
         checkCorrectInputArgument(args);
         int numberTask = Integer.parseInt(args[1]);
-        this.checkCommandAndImplementDependingOneSelectedCommand(numberTask, Command.STOP);
+        this.tasks.get(numberTask).interrupt();
+        System.out.printf("STOP THREAD %d %n", this.tasks.get(numberTask).getId());
     }
 
 
     private void await(String[] args) throws IncorrectCommandArgumentException, InterruptedException {
         checkCorrectInputArgument(args);
         int numberTask = Integer.parseInt(args[1]);
-        this.checkCommandAndImplementDependingOneSelectedCommand(numberTask, Command.AWAIT);
+        System.out.printf("AWAIT THREAD %d %n", this.tasks.get(numberTask).getId());
+        this.tasks.get(numberTask).join();
     }
 
     private void exit(String[] args) throws IncorrectCommandArgumentException, InterruptedException {
         if (args.length != 1) {
             throw new IncorrectCommandArgumentException();
         }
-        exit();
-    }
-
-    private void exit() throws InterruptedException {
         this.tasks.forEach(Thread::interrupt);
         for (Thread thread : tasks) {
             thread.join();
-        }
-    }
-
-    private void checkCommandAndImplementDependingOneSelectedCommand(int numberTask, Command command) throws InterruptedException {
-        long idThread = Thread.currentThread().getId();
-        if (!this.tasks.get(numberTask).isInterrupted()) {
-            switch (command) {
-                case STOP -> {
-                    this.tasks.get(numberTask).interrupt();
-                    System.out.printf("STOP THREAD %d", idThread);
-                }
-                case AWAIT -> {
-                    System.out.printf("AWAIT THREAD %d", idThread);
-                    this.tasks.get(numberTask).join();
-                }
-            }
+            System.out.printf("Thread with id %d FINIsSHED %n", thread.getId());
         }
     }
 
@@ -109,9 +94,9 @@ public class ThreadConsoleApplication {
         }
     }
 
-    private static void checkCorrectInputArgument(String[] args) throws IncorrectCommandArgumentException {
+    private static void checkCorrectInputArgument(String[] args) throws IncorrectCommandArgumentException, NumberFormatException {
         Predicate<String[]> predicateCorrectInputString =
-                arguments -> arguments.length == 2 && arguments[1] != null;
+                arguments -> arguments.length == 2 && arguments[1] != null && Integer.parseInt(args[1]) >= 0;
         if (predicateCorrectInputString.negate().test(args)) {
             throw new IncorrectCommandArgumentException();
         }

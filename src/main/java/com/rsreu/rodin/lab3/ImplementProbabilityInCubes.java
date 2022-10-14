@@ -1,17 +1,11 @@
 package com.rsreu.rodin.lab3;
 
+import com.rsreu.rodin.generalLogic.UtilityCalculateProbabilityInCubesLogic;
 import lombok.Getter;
-
-import java.util.Random;
 
 public class ImplementProbabilityInCubes implements Runnable {
 
-    private static final int DICE_EDGE_COUNT = 10; // количество граней кубика
-    private static final int THROWS_COUNT_IN_SINGLE_TEST = 10; // количество бросков в одном опыте
-    public static final int LOWER_SCORE_BOUND = 80; // значение очков, которое надо превысить, чтобы событие произошло
-
-    private static final Random random = new Random();
-
+    private static final Integer COUNT_MESSAGE = 10;
     @Getter
     private long testCount;
 
@@ -19,40 +13,25 @@ public class ImplementProbabilityInCubes implements Runnable {
         this.testCount = testCount;
     }
 
-    private static boolean makeThrowingExperiment() {
-        int sum = 0;
-        for (int i = 0; i < THROWS_COUNT_IN_SINGLE_TEST; ++i) {
-            int thrownValue = 0;
-            do // бросаем до тех пор, пока не получим "невзрывную" комбинацию
-                thrownValue += random.nextInt(DICE_EDGE_COUNT) + 1;
-            while (thrownValue == DICE_EDGE_COUNT);
-
-            sum += thrownValue;
-        }
-        return sum > LOWER_SCORE_BOUND;
+    private static boolean checkSumPointDuringExperiment() {
+        UtilityCalculateProbabilityInCubesLogic utilityCalculateProbabilityInCubesLogic
+                = new UtilityCalculateProbabilityInCubesLogic();
+        return utilityCalculateProbabilityInCubesLogic.makeExperiment();
     }
 
     public double calculateExceedProbability(long testsCount) throws InterruptedException {
         double probability;
-        int countMessage = 10;
-        long stepMessage = testsCount / countMessage;
-        long nextMessageIndex = 0;
+        int countMessage = COUNT_MESSAGE;
 
         long numbersExcesses = 0;
-        for (long i = 0; i < testsCount; ++i) {
+        for (long i = 0; i < testsCount; i++) {
             if (Thread.currentThread().isInterrupted()){
                 System.out.printf("Thread with %d interrupted", Thread.currentThread().getId());
                 return 0;
             }
 
-            if (makeThrowingExperiment())
-                ++numbersExcesses;
-
-            if (i == nextMessageIndex) {
-                System.out.printf("Thread name: %s, Completed on %.1f percent\n",
-                        Thread.currentThread().getName(),
-                        100.0 * nextMessageIndex / testsCount);
-                nextMessageIndex += stepMessage;
+            if (checkSumPointDuringExperiment()) {
+                numbersExcesses++;
             }
         }
         probability = (double) numbersExcesses / testsCount;
@@ -62,10 +41,10 @@ public class ImplementProbabilityInCubes implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.printf("Probability: %f\n", calculateExceedProbability(testCount));
-            System.out.printf("Thread %s finished", Thread.currentThread().getId());
+            System.out.printf("Probability: %f %n", calculateExceedProbability(testCount));
+            System.out.printf("Thread %s finished %n", Thread.currentThread().getId());
         } catch (InterruptedException e) {
-            System.out.printf("Thread %s stopped\n", Thread.currentThread().getId());
+            System.out.printf("Thread %s stopped %n", Thread.currentThread().getId());
         }
     }
 }

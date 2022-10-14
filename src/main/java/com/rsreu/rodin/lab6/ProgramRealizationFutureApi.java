@@ -1,26 +1,35 @@
 package com.rsreu.rodin.lab6;
 
+
+import com.rsreu.rodin.lab2.ImplementProbabilityInCubes;
+
+import java.util.function.Function;
+import java.util.logging.Logger;
+
 public class ProgramRealizationFutureApi {
 
-    private static final Double E = 0.0001;
+    private static final Logger logger = Logger.getLogger(ProgramRealizationFutureApi.class.getName());
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        final long TESTS_COUNT = 1000000000;
 
+        long startTime;
+        long endTime;
+        double probability;
+
+        // параллельно
+        System.out.println("Начало параллельных вычислений");
+        startTime = System.nanoTime();
+        probability = ThreadControlUsingExecutorService.startThreadUsingExecutors(TESTS_COUNT);
+        endTime = System.nanoTime();
+        System.out.printf("Параллельно:\nВремя: %.3f\nВероятность: %f\n\n", (endTime - startTime) / 1e9, probability);
+
+        // непараллельно
+        System.out.println("Начало непараллельных вычислений");
+        startTime = System.nanoTime();
+        Function<Long, Double> getProbabilityInExperiment = ImplementProbabilityInCubes::getProbabilityInExperiment;
+        probability = getProbabilityInExperiment.apply(TESTS_COUNT);
+        endTime = System.nanoTime();
+        System.out.printf("Не параллельно:\nВремя: %.3f\nВероятность: %f\n\n", (endTime - startTime) / 1e9, probability);
     }
-
-//    private static void implementExecutorService() {
-//        ExecutorService executorService = Executors.newCachedThreadPool();
-//        Future<String> future = executorService.submit(() -> {
-//            ImplementProbabilityInCubes implementProbabilityInCubes =
-//                    new ImplementProbabilityInCubes("Future thread", E);
-//            return implementProbabilityInCubes.call();
-//        });
-//        try {
-//            String s = future.get();
-//            System.out.println(s);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        executorService.shutdown();
-//    }
 }
