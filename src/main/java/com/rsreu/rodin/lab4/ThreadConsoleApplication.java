@@ -13,37 +13,26 @@ public class ThreadConsoleApplication {
 
     private static final String REGEX_SPLIT = " ";
 
-    private static final String UNKNOWN_COMMAND = "Input command not found";
-
-    private static final String INCORRECT_INDEX = "Incorrect index of task";
-
-    private static final String INCORRECT_NUMBER_FORMAT = "Incorrect number format";
-
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     private Command command = null;
 
     private final List<Thread> tasks = new ArrayList<>();
 
-    public void runProgram() {
+    public void runProgram() throws InterruptedException,
+            IndexOutOfBoundsException,
+            IncorrectCommandArgumentException,
+            NumberFormatException {
         while (command != Command.EXIT) {
             String inputString = this.scanner.nextLine();
             String[] args = inputString.split(REGEX_SPLIT);
             command = getCommand(args[0]);
-            try {
-                switch (command) {
-                    case START -> start(args);
-                    case STOP -> stop(args);
-                    case AWAIT -> await(args);
-                    case EXIT -> exit(args);
-                    default -> outputCommandTypeError();
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            } catch (IndexOutOfBoundsException | IncorrectCommandArgumentException e) {
-                System.err.println(INCORRECT_INDEX);
-            } catch (NumberFormatException e) {
-                System.err.println(INCORRECT_NUMBER_FORMAT);
+            switch (command) {
+                case START -> start(args);
+                case STOP -> stop(args);
+                case AWAIT -> await(args);
+                case EXIT -> exit(args);
+                default -> outputCommandTypeError();
             }
         }
     }
@@ -82,7 +71,7 @@ public class ThreadConsoleApplication {
         this.tasks.forEach(Thread::interrupt);
         for (Thread thread : tasks) {
             thread.join();
-            System.out.printf("Thread with id %d FINIsSHED %n", thread.getId());
+            System.out.printf("Thread with id %d FINISHED %n", thread.getId());
         }
     }
 
@@ -103,6 +92,6 @@ public class ThreadConsoleApplication {
     }
 
     private void outputCommandTypeError() {
-        System.err.println(UNKNOWN_COMMAND);
+        System.err.println("Input command not found");
     }
 }

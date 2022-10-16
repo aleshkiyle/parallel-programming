@@ -4,32 +4,31 @@ package com.rsreu.rodin.lab6;
 import com.rsreu.rodin.lab2.ImplementProbabilityInCubes;
 
 import java.util.function.Function;
-import java.util.logging.Logger;
 
 public class ProgramRealizationFutureApi {
 
-    private static final Logger logger = Logger.getLogger(ProgramRealizationFutureApi.class.getName());
+    public static void main(String[] args) {
+        final long TESTS_COUNT = Integer.MAX_VALUE / 12;
 
-    public static void main(String[] args) throws Exception {
-        final long TESTS_COUNT = 1000000000;
-
-        long startTime;
+        double startTime;
         long endTime;
         double probability;
 
-        // параллельно
-        System.out.println("Начало параллельных вычислений");
-        startTime = System.nanoTime();
-        probability = ThreadControlUsingExecutorService.startThreadUsingExecutors(TESTS_COUNT);
-        endTime = System.nanoTime();
-        System.out.printf("Параллельно:\nВремя: %.3f\nВероятность: %f\n\n", (endTime - startTime) / 1e9, probability);
+        try {
+            startTime = System.currentTimeMillis();
+            probability = ThreadControlUsingExecutorService.startThreadUsingExecutors(TESTS_COUNT);
+            endTime = System.currentTimeMillis();
+            System.out.printf("Parallel computing:%nTime: %.3f%nProbability: %f%n%n",
+                    (endTime - startTime) / 1000, probability);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
-        // непараллельно
-        System.out.println("Начало непараллельных вычислений");
-        startTime = System.nanoTime();
+        startTime = System.currentTimeMillis();
         Function<Long, Double> getProbabilityInExperiment = ImplementProbabilityInCubes::getProbabilityInExperiment;
         probability = getProbabilityInExperiment.apply(TESTS_COUNT);
-        endTime = System.nanoTime();
-        System.out.printf("Не параллельно:\nВремя: %.3f\nВероятность: %f\n\n", (endTime - startTime) / 1e9, probability);
+        endTime = System.currentTimeMillis();
+        System.out.printf("Non-parallel computing:%nTime: %.3f%nProbability: %f%n%n",
+                (endTime - startTime) / 1000, probability);
     }
 }

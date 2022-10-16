@@ -21,7 +21,6 @@ public class ImplementProbabilityInCubes implements Runnable {
 
     public double calculateExceedProbability(long testsCount) throws InterruptedException {
         double probability;
-        int countMessage = COUNT_MESSAGE;
 
         long numbersExcesses = 0;
         for (long i = 0; i < testsCount; i++) {
@@ -41,7 +40,7 @@ public class ImplementProbabilityInCubes implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.printf("Probability: %f %n", calculateExceedProbability(testCount));
+            System.out.printf(" Probability: %f %n", calculateExceedProbability(testCount));
             System.out.printf("Thread %s finished %n", Thread.currentThread().getId());
         } catch (InterruptedException e) {
             System.out.printf("Thread %s stopped %n", Thread.currentThread().getId());
