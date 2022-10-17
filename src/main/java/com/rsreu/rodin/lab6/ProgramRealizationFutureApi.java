@@ -18,7 +18,7 @@ public class ProgramRealizationFutureApi {
             startTime = System.currentTimeMillis();
             probability = ThreadControlUsingExecutorService.startThreadUsingExecutors(TESTS_COUNT);
             endTime = System.currentTimeMillis();
-            System.out.printf("Parallel computing:%nTime: %.3f%nProbability: %f%n%n",
+            System.out.printf("Parallel computing%nTime: %.3f%nProbability: %f%n%n",
                     (endTime - startTime) / 1000, probability);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -28,7 +28,7 @@ public class ProgramRealizationFutureApi {
         Function<Long, Double> getProbabilityInExperiment = ImplementProbabilityInCubes::getProbabilityInExperiment;
         probability = getProbabilityInExperiment.apply(TESTS_COUNT);
         endTime = System.currentTimeMillis();
-        System.out.printf("Non-parallel computing:%nTime: %.3f%nProbability: %f%n%n",
+        System.out.printf("Non-parallel computing%nTime: %.3f%nProbability: %f%n%n",
                 (endTime - startTime) / 1000, probability);
     }
 }

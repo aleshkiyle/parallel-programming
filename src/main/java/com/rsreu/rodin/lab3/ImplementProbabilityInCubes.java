@@ -26,7 +26,7 @@ public class ImplementProbabilityInCubes implements Runnable {
         for (long i = 0; i < testsCount; i++) {
             if (Thread.currentThread().isInterrupted()){
                 System.out.printf("Thread with %d interrupted", Thread.currentThread().getId());
-                return 0;
+                throw new InterruptedException();
             }
 
             if (checkSumPointDuringExperiment()) {
@@ -43,7 +43,7 @@ public class ImplementProbabilityInCubes implements Runnable {
             System.out.printf(" Probability: %f %n", calculateExceedProbability(testCount));
             System.out.printf("Thread %s finished %n", Thread.currentThread().getId());
         } catch (InterruptedException e) {
-            System.out.printf("Thread %s stopped %n", Thread.currentThread().getId());
+            System.out.printf("%nThread %s stopped %n", Thread.currentThread().getId());
         }
     }
 }

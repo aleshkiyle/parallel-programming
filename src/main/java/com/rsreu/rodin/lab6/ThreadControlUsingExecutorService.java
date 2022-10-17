@@ -7,20 +7,19 @@ import java.util.function.Function;
 
 public class ThreadControlUsingExecutorService {
 
-    private static final Integer COUNT_THREADS = 12;
+    private static final Integer COUNT_THREADS = 6;
 
-    private static final ExecutorService threadPool =
+    private static final ExecutorService THREAD_POOL =
             Executors.newFixedThreadPool(COUNT_THREADS);
 
-    private static final List<Callable<Double>> tasks
+    private static final List<Callable<Double>> TASKS
             = new ArrayList<>();
 
     public static double startThreadUsingExecutors(long testCount) throws InterruptedException {
         long testForTask = testCount / COUNT_THREADS;
         splitTasksByThreadsFromThreadPool(testForTask);
 
-        List<Future<Double>> futures = getFutures();
-
+        List<Future<Double>> futures = getFutures(TASKS);
         final double[] resultProbability = getResultProbability(futures);
         return resultProbability[0];
     }
@@ -30,12 +29,10 @@ public class ThreadControlUsingExecutorService {
         System.out.println("Tasks are divided into " + COUNT_THREADS + " tasks");
         int[] parts = {0};
         for (int i = 0; i < COUNT_THREADS; i++) {
-            tasks.add(() -> {
+            TASKS.add(() -> {
                 double start = System.currentTimeMillis();
                 double result = calculateExceedProbability.apply(testForTask);
-                synchronized (parts) {
-                    parts[0]++;
-                }
+                parts[0]++;
                 System.out.printf("Task %d complete, Time: %.3f, Result task = %.5f%n", parts[0],
                         (System.currentTimeMillis() - start) / 1_000, result / COUNT_THREADS);
                 return result;
@@ -43,11 +40,9 @@ public class ThreadControlUsingExecutorService {
         }
     }
 
-    private static List<Future<Double>> getFutures()
+    private static List<Future<Double>> getFutures(List<Callable<Double>> tasks)
             throws InterruptedException {
-        List<Future<Double>> futures =
-                threadPool.invokeAll(tasks);
-        return futures;
+        return THREAD_POOL.invokeAll(tasks);
     }
 
     private static double[] getResultProbability(List<Future<Double>> futures) {
@@ -57,11 +52,12 @@ public class ThreadControlUsingExecutorService {
                     try {
                         resultProbability[0] += future.get();
                     } catch (InterruptedException | ExecutionException e) {
+                        Thread.currentThread().interrupt();
                         e.printStackTrace();
                     }
                 });
         resultProbability[0] /= COUNT_THREADS;
-        threadPool.shutdown();
+        THREAD_POOL.shutdown();
         return resultProbability;
     }
 
