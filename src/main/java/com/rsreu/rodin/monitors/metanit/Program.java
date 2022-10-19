@@ -1,4 +1,4 @@
-package monitors;
+package com.rsreu.rodin.monitors.metanit;
 
 import java.util.concurrent.Semaphore;
 
