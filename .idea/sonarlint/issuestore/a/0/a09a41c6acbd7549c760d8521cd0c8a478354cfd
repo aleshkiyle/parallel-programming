@@ -1,0 +1,13 @@
+
+I
+java:S1121 ".Extract the assignment out of this expression.(…¦‡ªýÿÿÿÿ
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Üàë¿úÿÿÿÿ
+D
+java:S2140")Use "java.util.Random.nextInt()" instead.(•¶’Ÿøÿÿÿÿ
+<	java:S131""Add a default case to this switch.(œ¡²¿üÿÿÿÿ
+S	java:S106"9Replace this use of System.out or System.err by a logger.(¾²Úëøÿÿÿÿ
+S	java:S106"9Replace this use of System.out or System.err by a logger.(‹…ÊÉýÿÿÿÿ
+S	java:S106"9Replace this use of System.out or System.err by a logger.(ÀÉÏüÿÿÿÿ
+N	java:S106"9Replace this use of System.out or System.err by a logger.(üŽ‡Î
+t
+java:S2142"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€

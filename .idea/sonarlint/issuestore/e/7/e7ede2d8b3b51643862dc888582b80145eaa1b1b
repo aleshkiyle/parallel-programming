@@ -1,0 +1,13 @@
+
+ó
+java:S1130"ÄRemove the declaration of thrown exception 'java.util.concurrent.ExecutionException', as it cannot be thrown from method's body.(≠ÀêÍ
+Q	java:S125"<This block of commented-out lines of code should be removed.(Úˇ ê
+N	java:S106!"9Replace this use of System.out or System.err by a logger.(‡˘ìƒ
+V	java:S125"<This block of commented-out lines of code should be removed.(€Å”¸ˇˇˇˇ
+S	java:S106""9Replace this use of System.out or System.err by a logger.(˜⁄¢œˇˇˇˇˇ
+t
+java:S21424"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(‰†πÄ
+S	java:S106,"9Replace this use of System.out or System.err by a logger.(˙∞û˛¯ˇˇˇˇ
+S	java:S1063"9Replace this use of System.out or System.err by a logger.(ﬂÈ¥ß¯ˇˇˇˇ
+V	java:S125."<This block of commented-out lines of code should be removed.(˚π£‘˝ˇˇˇˇ
+S	java:S1065"9Replace this use of System.out or System.err by a logger.(≈Óí§˘ˇˇˇˇ

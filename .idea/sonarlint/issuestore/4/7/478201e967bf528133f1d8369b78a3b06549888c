@@ -1,0 +1,22 @@
+
+V	java:S125
+"<This block of commented-out lines of code should be removed.(†ÉÚ¢üÿÿÿÿ
+S	java:S106"9Replace this use of System.out or System.err by a logger.(ìÐæüÿÿÿÿ
+t
+java:S2142"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€
+N	java:S106"9Replace this use of System.out or System.err by a logger.(ðŽÖ
+S	java:S106"9Replace this use of System.out or System.err by a logger.(‹´šƒÿÿÿÿÿ
+S	java:S106""9Replace this use of System.out or System.err by a logger.(é™™²øÿÿÿÿ
+S	java:S106&"9Replace this use of System.out or System.err by a logger.(†ŒÛ¨ÿÿÿÿÿ
+N	java:S106*"9Replace this use of System.out or System.err by a logger.(×ý·
+S	java:S106."9Replace this use of System.out or System.err by a logger.(žÃø—ûÿÿÿÿ
+S	java:S1062"9Replace this use of System.out or System.err by a logger.(é™™²øÿÿÿÿ
+S	java:S1065"9Replace this use of System.out or System.err by a logger.(‹´šƒÿÿÿÿÿ
+Y
+java:S1144">Remove this unused private "implementMethodJoinMethod" method.(ÆÑû½ýÿÿÿÿ
+^
+java:S1144!"CRemove this unused private "iterateNumbersWithJThreadClass" method.(Œ²Â¿þÿÿÿÿ
+Y
+java:S1144)">Remove this unused private "runThreadUsingClassThread" method.(Æèýçøÿÿÿÿ
+Z
+java:S11441"DRemove this unused private "runThreadUsingInterfaceRunnable" method.(‰³‡á
