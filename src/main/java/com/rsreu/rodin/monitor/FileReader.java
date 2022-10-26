@@ -9,6 +9,10 @@ import java.util.stream.Stream;
 
 public class FileReader implements Runnable {
 
+
+    private static final Character SEARCH_SYMBOL = 'a';
+
+    private static final Integer COUNT_REPETITIONS_SYMBOL = 10;
     private final String path;
     private final AtomicInteger symbolCounter;
 
@@ -24,10 +28,10 @@ public class FileReader implements Runnable {
                             s.chars().mapToObj(i -> (char) i))
                     .toList();
             for (Character character : characters) {
-                if (character.equals('a')) {
+                if (character.equals(SEARCH_SYMBOL)) {
                     synchronized (symbolCounter) {
                         int count = symbolCounter.incrementAndGet();
-                        if (count >= 10) {
+                        if (count >= COUNT_REPETITIONS_SYMBOL) {
                             return;
                         }
                     }
