@@ -3,9 +3,18 @@ package com.rsreu.rodin.lab6;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 public class ThreadControlUsingExecutorService {
+
+    private final Semaphore semaphore = new Semaphore(2);
+
+    private final Lock lock = new ReentrantLock();
+
+    private final CountDownLatch countDownLatch =
+            new CountDownLatch(2);
 
     private static final Integer COUNT_THREADS = 6;
 
@@ -15,7 +24,7 @@ public class ThreadControlUsingExecutorService {
     private static final List<Callable<Double>> TASKS
             = new ArrayList<>();
 
-    public static double startThreadUsingExecutors(long testCount) throws InterruptedException {
+    public static double startThreadUsingExecutors(long testCount) throws InterruptedException, ExecutionException {
         long testForTask = testCount / COUNT_THREADS;
         splitTasksByThreadsFromThreadPool(testForTask);
 
@@ -45,23 +54,13 @@ public class ThreadControlUsingExecutorService {
         return THREAD_POOL.invokeAll(tasks);
     }
 
-    private static double[] getResultProbability(List<Future<Double>> futures) {
+    private static double[] getResultProbability(List<Future<Double>> futures) throws ExecutionException, InterruptedException {
         final double[] resultProbability = {0};
-        futures.forEach(
-                future -> {
-                    try {
-                        resultProbability[0] += future.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        Thread.currentThread().interrupt();
-                        e.printStackTrace();
-                    }
-                });
+        for (Future<Double> future : futures) {
+            resultProbability[0] += future.get();
+        }
         resultProbability[0] /= COUNT_THREADS;
         THREAD_POOL.shutdown();
         return resultProbability;
     }
-
-
-
-
 }
