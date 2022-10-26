@@ -3,9 +3,13 @@ package com.rsreu.rodin.lab3;
 import com.rsreu.rodin.generalLogic.UtilityCalculateProbabilityInCubesLogic;
 import lombok.Getter;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class ImplementProbabilityInCubes implements Runnable {
 
     private static final Integer COUNT_MESSAGE = 10;
+
+    private AtomicReference<Double> resultProbability;
     @Getter
     private long testCount;
 
@@ -24,7 +28,7 @@ public class ImplementProbabilityInCubes implements Runnable {
 
         long numbersExcesses = 0;
         for (long i = 0; i < testsCount; i++) {
-            if (Thread.currentThread().isInterrupted()){
+            if (Thread.currentThread().isInterrupted()) {
                 System.out.printf("Thread with %d interrupted", Thread.currentThread().getId());
                 throw new InterruptedException();
             }
@@ -40,8 +44,11 @@ public class ImplementProbabilityInCubes implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.printf(" Probability: %f %n", calculateExceedProbability(testCount));
-            System.out.printf("Thread %s finished %n", Thread.currentThread().getId());
+            synchronized (resultProbability) {
+                resultProbability.set(resultProbability.get() + calculateExceedProbability(testCount));
+                System.out.printf(" Probability: %f %n", calculateExceedProbability(testCount));
+                System.out.printf("Thread %s finished %n", Thread.currentThread().getId());
+            }
         } catch (InterruptedException e) {
             System.out.printf("%nThread %s stopped %n", Thread.currentThread().getId());
         }
