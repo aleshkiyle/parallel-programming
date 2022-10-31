@@ -25,6 +25,7 @@ public class Program {
             Thread.currentThread().interrupt();
         }
 
+        System.out.println("Counter symbol: " + counter.get());
         if (counter.get() < 10) {
             System.out.println("Ten characters not found");
         } else {
