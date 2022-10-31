@@ -1,1 +1,4 @@
-school aaaa
+school
+food
+block
+sanitary

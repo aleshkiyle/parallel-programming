@@ -9,6 +9,8 @@ public class Program {
     private static final String SECOND_PATH = "C:\\Users\\Родин Алексей\\Desktop\\7 семестр\\Баранчиков. " +
             "Параллельное программирование\\parallel-programming\\src\\main\\resources\\file2.txt";
 
+    private static final Integer REQUIRED_NUMBER_CHARACTERS = 10;
+
     public static void main(String[] args) {
         final AtomicInteger counter = new AtomicInteger();
 
@@ -25,8 +27,7 @@ public class Program {
             Thread.currentThread().interrupt();
         }
 
-        System.out.println("Counter symbol: " + counter.get());
-        if (counter.get() < 10) {
+        if (counter.get() < REQUIRED_NUMBER_CHARACTERS) {
             System.out.println("Ten characters not found");
         } else {
             System.out.println("Ten characters found");
