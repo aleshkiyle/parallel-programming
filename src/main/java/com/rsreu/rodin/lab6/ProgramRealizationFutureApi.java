@@ -3,6 +3,7 @@ package com.rsreu.rodin.lab6;
 
 import com.rsreu.rodin.lab2.ImplementProbabilityInCubes;
 
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
 public class ProgramRealizationFutureApi {
@@ -20,7 +21,7 @@ public class ProgramRealizationFutureApi {
             endTime = System.currentTimeMillis();
             System.out.printf("Parallel computing%nTime: %.3f%nProbability: %f%n%n",
                     (endTime - startTime) / 1000, probability);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             Thread.currentThread().interrupt();
         }
 
