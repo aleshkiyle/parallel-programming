@@ -1,4 +1,4 @@
-package com.rsreu.rodin.monitors.metanit.lock;
+package com.rsreu.rodin.metanit.mutlithreading.monitors.metanit.lock;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.rsreu.rodin.metanit.exchanger;
+package com.rsreu.rodin.metanit.mutlithreading.exchanger;
 
 import java.util.concurrent.Exchanger;
 

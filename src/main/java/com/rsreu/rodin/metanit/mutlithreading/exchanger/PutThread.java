@@ -1,4 +1,4 @@
-package com.rsreu.rodin.metanit.exchanger;
+package com.rsreu.rodin.metanit.mutlithreading.exchanger;
 
 import java.util.concurrent.Exchanger;
 
@@ -11,7 +11,6 @@ public class PutThread implements Runnable {
         this.exchanger = exchanger;
         this.message = "Message from PutThread!";
     }
-
     @Override
     public void run() {
         try {

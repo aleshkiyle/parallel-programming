@@ -1,4 +1,4 @@
-package com.rsreu.rodin.monitors;
+package com.rsreu.rodin.metanit.mutlithreading.monitors;
 
 public class Singleton {
 
