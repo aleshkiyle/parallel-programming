@@ -1,4 +1,4 @@
-package com.rsreu.rodin.lab1.data;
+package com.rsreu.rodin.cmo.tasks;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,12 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Cylinder {
+@NoArgsConstructor
+public class CreateCustomerTask {
 
-    private double radius;
-    private double height;
+    private String username;
+    private Double balance;
 
 }
