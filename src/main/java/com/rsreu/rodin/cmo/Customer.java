@@ -8,7 +8,6 @@ import lombok.Setter;
 public class Customer {
 
     private String username;
-
     private Double balance;
 
     private Double spent = 0.0;

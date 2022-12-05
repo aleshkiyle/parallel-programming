@@ -95,7 +95,7 @@ public class OnlineShopTest {
     @Test
     public void buySuccessTest() {
         OnlineShop onlineShop = new OnlineShop();
-        String username = "testuser";
+        String username = "testUser";
         double balance = 100.0;
 
         onlineShop.createCustomer(username, balance);
@@ -164,7 +164,7 @@ public class OnlineShopTest {
     @Test
     public void buyBalanceErrorTest() {
         OnlineShop onlineShop = new OnlineShop();
-        String username = "testuser";
+        String username = "testUser";
         double balance = 4.0;
 
         onlineShop.createCustomer(username, balance);

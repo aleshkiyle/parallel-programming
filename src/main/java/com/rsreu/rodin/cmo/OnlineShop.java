@@ -13,10 +13,6 @@ public class OnlineShop {
     private final Map<String, Product> products = new HashMap<>();
     private Double balance = 0.0;
 
-    private final Integer quantity = 0;
-
-    private final Lock lock = new ReentrantLock();
-
     public Customer createCustomer(String username, Double balance) {
         synchronized (customers) {
             Customer customer = customers.get(username);
