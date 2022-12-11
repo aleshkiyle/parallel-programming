@@ -1,4 +1,4 @@
-package com.rsreu.rodin.cmo.tasks;
+package com.rsreu.rodin.cmo.task;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class CreateCustomerTask {
-
-    private String username;
-    private Double balance;
+public class AddGoodTask {
+    private String name;
+    private int quantity;
+    private Double price;
 
 }

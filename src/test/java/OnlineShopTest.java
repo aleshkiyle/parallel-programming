@@ -1,22 +1,26 @@
 import com.rsreu.rodin.cmo.Customer;
-import com.rsreu.rodin.cmo.OnlineShop;
 import com.rsreu.rodin.cmo.Product;
+import com.rsreu.rodin.cmo.OnlineShop;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OnlineShopTest {
 
     @Test
-    public void createCustomerSuccessTest() {
+    public void createCustomerSuccessTest() throws InterruptedException {
         OnlineShop onlineShop = new OnlineShop();
         String username = "testUser";
         Double balance = 100.0;
 
         onlineShop.createCustomer(username, balance);
+        while(!onlineShop.getQueue().isEmpty()){}
+        TimeUnit.MILLISECONDS.sleep(500);
 
         List<Customer> customers = new ArrayList<>(onlineShop.getCustomers().values());
 
@@ -30,7 +34,7 @@ public class OnlineShopTest {
     }
 
     @Test
-    public void createExistingCustomerSuccessTest() {
+    public void createExistingCustomerSuccessTest() throws InterruptedException {
         OnlineShop onlineShop = new OnlineShop();
         String username = "testUser";
         Double balance1 = 100.0;
@@ -38,6 +42,8 @@ public class OnlineShopTest {
 
         onlineShop.createCustomer(username, balance1);
         onlineShop.createCustomer(username, balance2);
+        while(!onlineShop.getQueue().isEmpty()){}
+        TimeUnit.MILLISECONDS.sleep(500);
 
         List<Customer> customers = new ArrayList<>(onlineShop.getCustomers().values());
 
@@ -50,16 +56,18 @@ public class OnlineShopTest {
     }
 
     @Test
-    public void addGoodSuccessTest() {
+    public void addGoodSuccessTest() throws InterruptedException {
         OnlineShop onlineShop = new OnlineShop();
-        String goodName = "orange";
+        String goodName = "t-shirt";
         int quantity = 20;
         Double price = 100.0;
 
         onlineShop.addProduct(goodName, quantity, price);
 
+        while(!onlineShop.getQueue().isEmpty()){}
+        TimeUnit.MILLISECONDS.sleep(500);
 
-        List<Product> products = new ArrayList<>(onlineShop.getGoods().values());
+        List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
 
         assertEquals(1, products.size());
 
@@ -71,9 +79,9 @@ public class OnlineShopTest {
     }
 
     @Test
-    public void addExistingGoodSuccessTest() {
+    public void addExistingGoodSuccessTest() throws InterruptedException {
         OnlineShop onlineShop = new OnlineShop();
-        String goodName = "orange";
+        String goodName = "t-shirt";
         int quantity1 = 20;
         Double price1 = 100.0;
         int quantity2 = 25;
@@ -81,8 +89,10 @@ public class OnlineShopTest {
 
         onlineShop.addProduct(goodName, quantity1, price1);
         onlineShop.addProduct(goodName, quantity2, price2);
+        while(!onlineShop.getQueue().isEmpty()){}
+        TimeUnit.MILLISECONDS.sleep(500);
 
-        List<Product> products = new ArrayList<>(onlineShop.getGoods().values());
+        List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
 
         assertEquals(1, products.size());
 
@@ -94,13 +104,13 @@ public class OnlineShopTest {
     }
 
     @Test
-    public void buySuccessTest() {
+    public void buySuccessTest() throws InterruptedException {
         OnlineShop onlineShop = new OnlineShop();
         String username = "testUser";
         double balance = 100.0;
 
         onlineShop.createCustomer(username, balance);
-        String goodName = "orange";
+        String goodName = "t-shirt";
         int quantity = 20;
         double price = 5.0;
 
@@ -109,7 +119,10 @@ public class OnlineShopTest {
         int buyQuantity = 10;
         onlineShop.buy(username, goodName, buyQuantity);
 
-        List<Product> products = new ArrayList<>(onlineShop.getGoods().values());
+        while(!onlineShop.getQueue().isEmpty()){}
+        TimeUnit.MILLISECONDS.sleep(500);
+
+        List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
 
         assertEquals(1, products.size());
 
@@ -128,13 +141,13 @@ public class OnlineShopTest {
     }
 
     @Test
-    public void buyQuantityErrorTest() {
+    public void buyQuantityErrorTest() throws InterruptedException {
         OnlineShop onlineShop = new OnlineShop();
-        String username = "testUsername";
+        String username = "testUser";
         double balance = 100.0;
 
         onlineShop.createCustomer(username, balance);
-        String goodName = "orange";
+        String goodName = "t-shirt";
         int quantity = 2;
         double price = 5.0;
 
@@ -143,7 +156,10 @@ public class OnlineShopTest {
         int buyQuantity = 10;
         onlineShop.buy(username, goodName, buyQuantity);
 
-        List<Product> products = new ArrayList<>(onlineShop.getGoods().values());
+        while(!onlineShop.getQueue().isEmpty()){}
+        TimeUnit.MILLISECONDS.sleep(500);
+
+        List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
 
         assertEquals(1, products.size());
 
@@ -162,22 +178,27 @@ public class OnlineShopTest {
     }
 
     @Test
-    public void buyBalanceErrorTest() {
+    public void buyBalanceErrorTest() throws InterruptedException {
         OnlineShop onlineShop = new OnlineShop();
         String username = "testUser";
         double balance = 4.0;
 
         onlineShop.createCustomer(username, balance);
-        String goodName = "orange";
+        String goodName = "t-shirt";
         int quantity = 50;
         double price = 5.0;
 
         onlineShop.addProduct(goodName, quantity, price);
 
+        while(!onlineShop.getQueue().isEmpty()){}
+        Thread.sleep(100);
+
         int buyQuantity = 10;
         onlineShop.buy(username, goodName, buyQuantity);
+        while(!onlineShop.getQueue().isEmpty()){}
+        Thread.sleep(100);
 
-        List<Product> products = new ArrayList<>(onlineShop.getGoods().values());
+        List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
 
         assertEquals(1, products.size());
 

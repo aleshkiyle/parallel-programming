@@ -1,4 +1,4 @@
-package com.rsreu.rodin.cmo.tasks;
+package com.rsreu.rodin.cmo.task;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class BuyTask {
-
     private String customerUserName;
-    private String goodProduct;
+    private String goodName;
     private Integer quantity;
 }

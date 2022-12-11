@@ -1,13 +1,16 @@
 package com.rsreu.rodin.cmo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class Product {
-
     private Double price;
-    private Integer quantity;
+    private int quantity;
     private String name;
+
+    public Product(Double price, int quantity, String name) {
+        this.price = price;
+        this.quantity = quantity;
+        this.name = name;
+    }
 }

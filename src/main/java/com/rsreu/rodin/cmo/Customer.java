@@ -1,15 +1,9 @@
 package com.rsreu.rodin.cmo;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class Customer {
-
     private String username;
     private Double balance;
 

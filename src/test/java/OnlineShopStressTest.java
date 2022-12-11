@@ -11,9 +11,8 @@ import java.util.concurrent.Future;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OnlineShopStressTest {
-
     @Test
-    public void createCustomerStressTest() throws ExecutionException, InterruptedException {
+        public void createCustomerStressTest() throws ExecutionException, InterruptedException {
         class CustomerCreator implements Runnable {
 
             private final int start;
@@ -59,6 +58,7 @@ public class OnlineShopStressTest {
             future.get();
         }
         assertEquals(50, onlineShop.getCustomers().size());
+
     }
 
     @Test
@@ -71,8 +71,7 @@ public class OnlineShopStressTest {
             private final int repeats;
             private final OnlineShop onlineShop;
 
-            public BuyRunnable(OnlineShop shop, String customerName,
-                               String goodName, int quantity, int repeats) {
+            public BuyRunnable(OnlineShop shop, String customerName, String goodName, int quantity, int repeats) {
                 this.quantity = quantity;
                 this.goodName = goodName;
                 this.customerName = customerName;
@@ -87,7 +86,6 @@ public class OnlineShopStressTest {
                 }
             }
         }
-
         String goodName = "Orange";
         double goodPrice = 2.0;
         OnlineShop onlineShop = new OnlineShop();
@@ -111,7 +109,9 @@ public class OnlineShopStressTest {
             future.get();
         }
 
-        assertEquals(0, onlineShop.getGoodsList().get(0).getQuantity());
+        while(!onlineShop.getQueue().isEmpty()){}
+
+        assertEquals(0, onlineShop.getProductsList().get(0).getQuantity());
         assertEquals(2000.0, onlineShop.getBalance());
 
         onlineShop.getCustomers().values().forEach(customer -> {
@@ -129,8 +129,7 @@ public class OnlineShopStressTest {
             private final int repeats;
             private final OnlineShop onlineShop;
 
-            public BuyRunnable(OnlineShop shop, String customerName,
-                               String goodName, int quantity, int repeats) {
+            public BuyRunnable(OnlineShop shop, String customerName, String goodName, int quantity, int repeats) {
                 this.quantity = quantity;
                 this.goodName = goodName;
                 this.customerName = customerName;
@@ -155,8 +154,7 @@ public class OnlineShopStressTest {
         }
         List<Runnable> tasks = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
-            tasks.add(new BuyRunnable(onlineShop, "Customer " + i,
-                    goodName, 1, 100000));
+            tasks.add(new BuyRunnable(onlineShop, "Customer " + i, goodName, 1, 100000));
         }
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
@@ -170,8 +168,8 @@ public class OnlineShopStressTest {
             future.get();
         }
 
+        while(!onlineShop.getQueue().isEmpty()){}
         long stop = System.currentTimeMillis();
         System.out.println(100000000.0/((stop-start)/1000.0));
     }
-
 }
