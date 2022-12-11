@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BuyTask {
     private String customerUserName;
-    private String goodName;
+    private String productName;
     private Integer quantity;
 }

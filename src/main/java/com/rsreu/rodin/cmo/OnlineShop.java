@@ -8,15 +8,14 @@ import lombok.AllArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class OnlineShop {
     private final Map<String, Customer> customers = new ConcurrentHashMap<>();
-    private final Map<String, Product> goods = new ConcurrentHashMap<>();
-    private final BlockingQueue<Object> queue = new LinkedBlockingQueue<>();
+    private final Map<String, Product> products = new ConcurrentHashMap<>();
+    private final BlockingQueue<Object> blockingQueue = new LinkedBlockingQueue<>();
 
     private Double balance = 0.0;
 
@@ -48,14 +47,14 @@ public class OnlineShop {
                 }
             }
         }
-        TaskProcessor taskProcessor = new TaskProcessor(queue, this);
+        TaskProcessor taskProcessor = new TaskProcessor(blockingQueue, this);
         Thread thread = new Thread(taskProcessor);
         thread.start();
     }
 
     public void createCustomer(String username, Double balance) {
         try {
-            queue.put(CreateCustomerTask.builder()
+            blockingQueue.put(CreateCustomerTask.builder()
                     .username(username)
                     .balance(balance)
                     .build());
@@ -76,7 +75,7 @@ public class OnlineShop {
 
     public void addProduct(String name, int quantity, Double price) {
         try {
-            queue.put(AddGoodTask.builder()
+            blockingQueue.put(AddGoodTask.builder()
                     .name(name)
                     .price(price)
                     .quantity(quantity)
@@ -87,21 +86,21 @@ public class OnlineShop {
     }
 
     private void addProduct(AddGoodTask addGoodTask) {
-        Product product = goods.get(addGoodTask.getName());
+        Product product = products.get(addGoodTask.getName());
         if (product != null) {
             product.setQuantity(product.getQuantity() + addGoodTask.getQuantity());
             product.setPrice(addGoodTask.getPrice());
         } else {
             product = new Product(addGoodTask.getPrice(), addGoodTask.getQuantity(), addGoodTask.getName());
-            goods.put(addGoodTask.getName(), product);
+            products.put(addGoodTask.getName(), product);
         }
     }
 
-    public void buy(String customerUserName, String goodName, Integer quantity) {
+    public void buy(String customerUserName, String productName, Integer quantity) {
         try {
-            queue.put(BuyTask.builder()
+            blockingQueue.put(BuyTask.builder()
                     .customerUserName(customerUserName)
-                    .goodName(goodName)
+                    .productName(productName)
                     .quantity(quantity)
                     .build());
         } catch (InterruptedException e) {
@@ -111,7 +110,7 @@ public class OnlineShop {
 
     private void buy(BuyTask buyTask) {
         Customer customer = findCustomer(buyTask.getCustomerUserName());
-        Product product = findProduct(buyTask.getGoodName());
+        Product product = findProduct(buyTask.getProductName());
         if (product.getQuantity() < buyTask.getQuantity()) {
             throw new IllegalArgumentException("Insufficient quantity of products");
         }
@@ -137,15 +136,15 @@ public class OnlineShop {
     }
 
     public List<Product> getProductsList() {
-        synchronized (goods) {
-            return new ArrayList<>(goods.values());
+        synchronized (products) {
+            return new ArrayList<>(products.values());
         }
     }
 
     private Product findProduct(String goodName) {
-        Product product = goods.get(goodName);
+        Product product = products.get(goodName);
         if (product == null) {
-            throw new IllegalArgumentException("Такого товара не существует");
+            throw new IllegalArgumentException("");
         }
         return product;
     }
@@ -173,12 +172,12 @@ public class OnlineShop {
     }
 
     public Map<String, Product> getProducts() {
-        synchronized (goods) {
-            return goods;
+        synchronized (products) {
+            return products;
         }
     }
 
-    public BlockingQueue<Object> getQueue() {
-        return queue;
+    public BlockingQueue<Object> getBlockingQueue() {
+        return blockingQueue;
     }
 }

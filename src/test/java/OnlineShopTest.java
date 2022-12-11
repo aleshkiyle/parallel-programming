@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +18,7 @@ public class OnlineShopTest {
         Double balance = 100.0;
 
         onlineShop.createCustomer(username, balance);
-        while(!onlineShop.getQueue().isEmpty()){}
+        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Customer> customers = new ArrayList<>(onlineShop.getCustomers().values());
@@ -42,7 +41,7 @@ public class OnlineShopTest {
 
         onlineShop.createCustomer(username, balance1);
         onlineShop.createCustomer(username, balance2);
-        while(!onlineShop.getQueue().isEmpty()){}
+        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Customer> customers = new ArrayList<>(onlineShop.getCustomers().values());
@@ -64,7 +63,7 @@ public class OnlineShopTest {
 
         onlineShop.addProduct(goodName, quantity, price);
 
-        while(!onlineShop.getQueue().isEmpty()){}
+        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
@@ -89,7 +88,7 @@ public class OnlineShopTest {
 
         onlineShop.addProduct(goodName, quantity1, price1);
         onlineShop.addProduct(goodName, quantity2, price2);
-        while(!onlineShop.getQueue().isEmpty()){}
+        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
@@ -119,7 +118,7 @@ public class OnlineShopTest {
         int buyQuantity = 10;
         onlineShop.buy(username, goodName, buyQuantity);
 
-        while(!onlineShop.getQueue().isEmpty()){}
+        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
@@ -156,7 +155,7 @@ public class OnlineShopTest {
         int buyQuantity = 10;
         onlineShop.buy(username, goodName, buyQuantity);
 
-        while(!onlineShop.getQueue().isEmpty()){}
+        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
@@ -190,12 +189,12 @@ public class OnlineShopTest {
 
         onlineShop.addProduct(goodName, quantity, price);
 
-        while(!onlineShop.getQueue().isEmpty()){}
+        while(!onlineShop.getBlockingQueue().isEmpty()){}
         Thread.sleep(100);
 
         int buyQuantity = 10;
         onlineShop.buy(username, goodName, buyQuantity);
-        while(!onlineShop.getQueue().isEmpty()){}
+        while(!onlineShop.getBlockingQueue().isEmpty()){}
         Thread.sleep(100);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
