@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class BuyTask {
+
     private String customerUserName;
+
     private String productName;
+
     private Integer quantity;
+
 }

@@ -1,66 +1,78 @@
 package com.rsreu.rodin.cmo;
 
-import com.rsreu.rodin.cmo.task.AddGoodTask;
+import com.lmax.disruptor.EventHandler;
+import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.dsl.Disruptor;
+import com.lmax.disruptor.util.DaemonThreadFactory;
+import com.rsreu.rodin.cmo.task.AddProductTask;
 import com.rsreu.rodin.cmo.task.BuyTask;
 import com.rsreu.rodin.cmo.task.CreateCustomerTask;
-import lombok.AllArgsConstructor;
+import com.rsreu.rodin.cmo.task.TaskEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class OnlineShop {
     private final Map<String, Customer> customers = new ConcurrentHashMap<>();
     private final Map<String, Product> products = new ConcurrentHashMap<>();
-    private final BlockingQueue<Object> blockingQueue = new LinkedBlockingQueue<>();
 
     private Double balance = 0.0;
 
+    int bufferSize = 1024 * 128;
+
+    Disruptor<TaskEvent> disruptor =
+            new Disruptor<>(TaskEvent::new, bufferSize, DaemonThreadFactory.INSTANCE);
+
+    RingBuffer<TaskEvent> ringBuffer;
+
+
     public OnlineShop() {
 
-        @AllArgsConstructor
-        class TaskProcessor implements Runnable {
-            private BlockingQueue<Object> queue;
-            private OnlineShop onlineShop;
+        class TaskEventHandler implements EventHandler<TaskEvent> {
+
+            private final OnlineShop onlineShop;
+
+            TaskEventHandler(OnlineShop onlineShop) {
+                this.onlineShop = onlineShop;
+            }
 
             @Override
-            public void run() {
-                while (true) {
-                    Object task;
-                    try {
-                        task = queue.take();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+            public void onEvent(TaskEvent taskEvent, long l, boolean b) {
+                Object task = taskEvent.getTask();
+                try {
                     if (task instanceof BuyTask) {
                         onlineShop.buy((BuyTask) task);
                     }
                     if (task instanceof CreateCustomerTask) {
                         onlineShop.createCustomer((CreateCustomerTask) task);
                     }
-                    if (task instanceof AddGoodTask) {
-                        onlineShop.addProduct((AddGoodTask) task);
+                    if (task instanceof AddProductTask) {
+                        onlineShop.addProduct((AddProductTask) task);
                     }
+                } catch (Exception e) {
+                    System.err.println(e);
                 }
             }
         }
-        TaskProcessor taskProcessor = new TaskProcessor(blockingQueue, this);
-        Thread thread = new Thread(taskProcessor);
-        thread.start();
+        final EventHandler<TaskEvent> eventHandler = new TaskEventHandler(this);
+        disruptor.handleEventsWith(eventHandler);
+        ringBuffer = disruptor.start();
+    }
+
+    private void publish(Object task) {
+        long sequence = ringBuffer.next();
+        TaskEvent taskEvent = ringBuffer.get(sequence);
+        taskEvent.setTask(task);
+        ringBuffer.publish(sequence);
     }
 
     public void createCustomer(String username, Double balance) {
-        try {
-            blockingQueue.put(CreateCustomerTask.builder()
-                    .username(username)
-                    .balance(balance)
-                    .build());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        publish(CreateCustomerTask.builder()
+                .username(username)
+                .balance(balance)
+                .build());
     }
 
     private void createCustomer(CreateCustomerTask createCustomerTask) {
@@ -74,38 +86,30 @@ public class OnlineShop {
     }
 
     public void addProduct(String name, int quantity, Double price) {
-        try {
-            blockingQueue.put(AddGoodTask.builder()
-                    .name(name)
-                    .price(price)
-                    .quantity(quantity)
-                    .build());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        publish(AddProductTask.builder()
+                .name(name)
+                .quantity(quantity)
+                .price(price)
+                .build());
     }
 
-    private void addProduct(AddGoodTask addGoodTask) {
-        Product product = products.get(addGoodTask.getName());
+    private void addProduct(AddProductTask addProductTask) {
+        Product product = products.get(addProductTask.getName());
         if (product != null) {
-            product.setQuantity(product.getQuantity() + addGoodTask.getQuantity());
-            product.setPrice(addGoodTask.getPrice());
+            product.setQuantity(product.getQuantity() + addProductTask.getQuantity());
+            product.setPrice(addProductTask.getPrice());
         } else {
-            product = new Product(addGoodTask.getPrice(), addGoodTask.getQuantity(), addGoodTask.getName());
-            products.put(addGoodTask.getName(), product);
+            product = new Product(addProductTask.getPrice(), addProductTask.getQuantity(), addProductTask.getName());
+            products.put(addProductTask.getName(), product);
         }
     }
 
     public void buy(String customerUserName, String productName, Integer quantity) {
-        try {
-            blockingQueue.put(BuyTask.builder()
-                    .customerUserName(customerUserName)
-                    .productName(productName)
-                    .quantity(quantity)
-                    .build());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        publish(BuyTask.builder()
+                .customerUserName(customerUserName)
+                .productName(productName)
+                .quantity(quantity)
+                .build());
     }
 
     private void buy(BuyTask buyTask) {
@@ -144,7 +148,7 @@ public class OnlineShop {
     private Product findProduct(String goodName) {
         Product product = products.get(goodName);
         if (product == null) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("This product does not exist");
         }
         return product;
     }
@@ -152,7 +156,7 @@ public class OnlineShop {
     private Customer findCustomer(String customerUserName) {
         Customer customer = customers.get(customerUserName);
         if (customer == null) {
-            throw new IllegalArgumentException("Такого клиента не существует");
+            throw new IllegalArgumentException("This client does not exist");
         }
         return customer;
     }
@@ -161,23 +165,17 @@ public class OnlineShop {
         synchronized (customers) {
             return customers;
         }
-
     }
 
     public double getBalance() {
         synchronized (balance) {
             return balance;
         }
-
     }
 
     public Map<String, Product> getProducts() {
         synchronized (products) {
             return products;
         }
-    }
-
-    public BlockingQueue<Object> getBlockingQueue() {
-        return blockingQueue;
     }
 }

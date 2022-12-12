@@ -9,9 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class AddGoodTask {
+public class AddProductTask {
+
     private String name;
+
     private int quantity;
+
     private Double price;
 
 }

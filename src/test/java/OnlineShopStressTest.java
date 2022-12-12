@@ -58,7 +58,6 @@ public class OnlineShopStressTest {
             future.get();
         }
         assertEquals(50, onlineShop.getCustomers().size());
-
     }
 
     @Test
@@ -109,7 +108,6 @@ public class OnlineShopStressTest {
             future.get();
         }
 
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
 
         assertEquals(0, onlineShop.getProductsList().get(0).getQuantity());
         assertEquals(2000.0, onlineShop.getBalance());
@@ -168,7 +166,6 @@ public class OnlineShopStressTest {
             future.get();
         }
 
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
         long stop = System.currentTimeMillis();
         System.out.println(100000000.0/((stop-start)/1000.0));
     }

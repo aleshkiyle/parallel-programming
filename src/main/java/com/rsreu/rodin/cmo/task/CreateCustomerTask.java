@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class CreateCustomerTask {
+
     private String username;
+
     private Double balance;
+
 }

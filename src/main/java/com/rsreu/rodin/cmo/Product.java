@@ -1,6 +1,7 @@
 package com.rsreu.rodin.cmo;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 public class Product {

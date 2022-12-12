@@ -18,12 +18,12 @@ public class OnlineShopTest {
         Double balance = 100.0;
 
         onlineShop.createCustomer(username, balance);
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Customer> customers = new ArrayList<>(onlineShop.getCustomers().values());
 
 
+        onlineShop.getCustomers().values().forEach(System.out::println);
         assertEquals(1, customers.size());
 
         Customer customer = customers.get(0);
@@ -41,11 +41,11 @@ public class OnlineShopTest {
 
         onlineShop.createCustomer(username, balance1);
         onlineShop.createCustomer(username, balance2);
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Customer> customers = new ArrayList<>(onlineShop.getCustomers().values());
 
+        onlineShop.getCustomers().values().forEach(System.out::println);
         assertEquals(1, customers.size());
 
         Customer customer = customers.get(0);
@@ -63,11 +63,11 @@ public class OnlineShopTest {
 
         onlineShop.addProduct(goodName, quantity, price);
 
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
 
+        onlineShop.getProducts().values().forEach(System.out::println);
         assertEquals(1, products.size());
 
         Product product = products.get(0);
@@ -88,11 +88,11 @@ public class OnlineShopTest {
 
         onlineShop.addProduct(goodName, quantity1, price1);
         onlineShop.addProduct(goodName, quantity2, price2);
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
 
+        onlineShop.getProducts().values().forEach(System.out::println);
         assertEquals(1, products.size());
 
         Product product = products.get(0);
@@ -116,12 +116,16 @@ public class OnlineShopTest {
         onlineShop.addProduct(goodName, quantity, price);
 
         int buyQuantity = 10;
+
         onlineShop.buy(username, goodName, buyQuantity);
 
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
+
+        onlineShop.getCustomers().values().forEach(System.out::println);
+        onlineShop.getProducts().values().forEach(System.out::println);
+
 
         assertEquals(1, products.size());
 
@@ -155,7 +159,6 @@ public class OnlineShopTest {
         int buyQuantity = 10;
         onlineShop.buy(username, goodName, buyQuantity);
 
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
         TimeUnit.MILLISECONDS.sleep(500);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
@@ -167,6 +170,9 @@ public class OnlineShopTest {
         List<Customer> customers = new ArrayList<>(onlineShop.getCustomers().values());
 
         assertEquals(1, customers.size());
+
+        onlineShop.getCustomers().values().forEach(System.out::println);
+        onlineShop.getProducts().values().forEach(System.out::println);
 
         Customer customer = customers.get(0);
 
@@ -189,13 +195,11 @@ public class OnlineShopTest {
 
         onlineShop.addProduct(goodName, quantity, price);
 
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
-        Thread.sleep(100);
+        TimeUnit.MILLISECONDS.sleep(500);
 
         int buyQuantity = 10;
         onlineShop.buy(username, goodName, buyQuantity);
-        while(!onlineShop.getBlockingQueue().isEmpty()){}
-        Thread.sleep(100);
+        TimeUnit.MILLISECONDS.sleep(500);
 
         List<Product> products = new ArrayList<>(onlineShop.getProducts().values());
 
@@ -206,6 +210,9 @@ public class OnlineShopTest {
         List<Customer> customers = new ArrayList<>(onlineShop.getCustomers().values());
 
         assertEquals(1, customers.size());
+
+        onlineShop.getCustomers().values().forEach(System.out::println);
+        onlineShop.getProducts().values().forEach(System.out::println);
 
         Customer customer = customers.get(0);
 
